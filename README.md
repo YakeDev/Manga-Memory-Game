@@ -18,9 +18,7 @@ Un jeu de mémoire simple et amusant où les joueurs doivent cliquer sur chaque 
 
 Manga Memory Card Game est un jeu de mémoire interactif construit avec React. Le but est simple : cliquer sur chaque carte sans en sélectionner une deux fois. Chaque clic réussi augmente votre score actuel. Si une carte est cliquée deux fois, la partie est terminée et le score est réinitialisé. Le meilleur score est enregistré pour défier les joueurs à battre leur record !
 
-![screenshot of the game](screenshot.png) <!-- Remplacez avec une capture d'écran de votre jeu si possible -->
-
----
+![alt text](image.png)
 
 ## Fonctionnalités
 
