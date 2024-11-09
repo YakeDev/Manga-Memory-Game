@@ -2,7 +2,7 @@ import CardGrid from './components/CardGrid';
 
 function App() {
 	return (
-		<div className='relative'>
+		<div className='relative dark:bg-slate-900'>
 			<div
 				className='min-h-screen'
 				style={{
