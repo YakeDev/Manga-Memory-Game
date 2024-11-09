@@ -28,16 +28,12 @@ Manga Memory Card Game est un jeu de mémoire interactif construit avec React. L
 - **Mélange des cartes** : Les cartes sont mélangées à chaque clic pour augmenter la difficulté.
 - **Design responsive** : Conception en utilisant Tailwind CSS pour une expérience utilisateur fluide sur tous les appareils.
 
----
-
 ## Technologies utilisées
 
 - **React** : Bibliothèque JavaScript pour créer des interfaces utilisateur.
 - **Kitsu API** : API pour récupérer des informations sur les animes et obtenir des images.
 - **Tailwind CSS** : Framework CSS utilitaire pour créer des designs responsives.
 - **JavaScript** : Langage principal utilisé pour la logique du jeu.
-
----
 
 ## Installation
 
