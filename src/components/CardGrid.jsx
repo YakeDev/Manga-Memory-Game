@@ -11,7 +11,7 @@ const CardGrid = () => {
 	const [imageType, setImageType] = useState(() => {
 		const saveImageType = localStorage.getItem('imageType');
 		if (saveImageType)
-			return saveImageType ? JSON.parse(saveImageType) : 'Naruto';
+			return saveImageType ? 'Naruto' : JSON.parse(saveImageType);
 	});
 
 	const [bestScore, setBestScore] = useState(() => {
