@@ -17,7 +17,7 @@ const CardGrid = () => {
 	const [bestScore, setBestScore] = useState(() => {
 		const savedBestScore = localStorage.getItem('bestScore');
 
-		if (savedBestScore) return savedBestScore ? JSON.parse(savedBestScore) : 0;
+		if (savedBestScore) return savedBestScore ? 0 : JSON.parse(savedBestScore);
 	});
 
 	useEffect(() => {
@@ -117,7 +117,7 @@ const CardGrid = () => {
 						</div>
 					</div>
 				) : (
-					<div className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 items-center justify-items-center place-items-stretch min-h-screen'>
+					<div className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 items-center justify-items-center place-items-stretch min-h-96'>
 						{shuffleArray(imagesList).map((image) => (
 							<Card
 								key={image.id}
