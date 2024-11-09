@@ -1,23 +1,35 @@
 import PropTypes from 'prop-types';
+import MangaImageType from './MangaImageType';
 
 const Header = ({
-	gameTitle = 'Manga Memory Game',
-	gameDescription = `Get points by clicking on an image but don't click on any more than once!`,
+	gameTitle = 'Manga Card Memory',
+	gameDescription = ``,
 	gameScore = 0,
 	bestScore = 0,
+	imageTypeValue,
+	setImageType,
 }) => {
 	return (
-		<div className='p-4 grid grig-cols-1 md:grid-cols-2 mb-2'>
-			<div>
-				<h2 className='text-lg md:text-5xl text-orange-900 tracking-tighter font-bold mb-2'>
-					{gameTitle}
-				</h2>
-				<p className='text-lg text-orange-950 w-2/3 tracking-tighter leading-tight'>
+		<div className='flex flex-col lg:flex-row justify-between items-center gap-10 p-4 '>
+			<div className=' p-2 lg:w-3/6  text-center md:text-start rounded-xl'>
+				<img
+					src='./Manga-MemoryCardlogo.svg'
+					alt={gameTitle}
+					className='h-24'
+				/>
+				<p className='text-sm md:w-3/4 text-orange-950  tracking-tighter leading-tight'>
 					{gameDescription}
 				</p>
 			</div>
-			<div className='text-end text-2xl align-middle font-semibold uppercase'>
-				<p className='items-center'>
+
+			<div className='text-center lg:w-3/6'>
+				<MangaImageType
+					value={imageTypeValue}
+					onChange={(e) => setImageType(e.target.value)}
+				/>
+			</div>
+			<div className='lg:w-2/6 text-end text-2xl align-middle font-semibold uppercase '>
+				<p className='items-center '>
 					<span className='text-lg font-normal me-3 '>Score: </span> {gameScore}
 				</p>
 				<p className='items-center'>
@@ -34,6 +46,8 @@ Header.propTypes = {
 	gameDescription: PropTypes.string,
 	gameScore: PropTypes.number,
 	bestScore: PropTypes.number,
+	imageTypeValue: PropTypes.string,
+	setImageType: PropTypes.func,
 };
 
 export default Header;

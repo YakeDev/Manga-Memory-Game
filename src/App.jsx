@@ -1,11 +1,18 @@
-import { useState } from 'react';
 import CardGrid from './components/CardGrid';
-import Header from './components/Header';
 
 function App() {
 	return (
 		<div className='relative'>
-			<CardGrid />
+			<div
+				className='min-h-screen'
+				style={{
+					backgroundImage: `url('./image.png')`,
+					backgroundSize: 'cover', // Couvre tout l’espace du conteneur
+					backgroundPosition: 'center', // Centre l'image
+					backgroundRepeat: 'no-repeat', // Évite la répétition de l'image
+				}}>
+				<CardGrid />
+			</div>
 		</div>
 	);
 }

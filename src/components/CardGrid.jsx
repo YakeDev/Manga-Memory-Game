@@ -2,14 +2,23 @@ import { useEffect, useState } from 'react';
 import Card from './Card';
 import Header from './Header';
 
-const CardGrid = (props) => {
+const CardGrid = () => {
 	const [imagesList, setImagesList] = useState([]);
-	const [imageType, setImageType] = useState('Kuruko');
-	const [clickedImages, setClickedImages] = useState([]); // état pour stocker les images cliquées
-
-	const [bestScore, setbestScore] = useState(0);
-	const [score, setScore] = useState(0);
+	const [clickedImages, setClickedImages] = useState([]);
 	const [gameOver, setGameOver] = useState(false);
+	const [score, setScore] = useState(0);
+
+	const [imageType, setImageType] = useState(() => {
+		const saveImageType = localStorage.getItem('imageType');
+		if (saveImageType)
+			return saveImageType ? JSON.parse(saveImageType) : 'Naruto';
+	});
+
+	const [bestScore, setBestScore] = useState(() => {
+		const savedBestScore = localStorage.getItem('bestScore');
+
+		if (savedBestScore) return savedBestScore ? JSON.parse(savedBestScore) : 0;
+	});
 
 	useEffect(() => {
 		// Fonction pour récupérer les données d'anime depuis l'API Kitsu
@@ -33,47 +42,82 @@ const CardGrid = (props) => {
 		const shuffled = [...array];
 		for (let i = shuffled.length - 1; i > 0; i--) {
 			const j = Math.floor(Math.random() * (i + 1));
-			[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]; // échange les éléments
+			[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
 		}
 		return shuffled;
 	};
 
 	// Fonction pour gérer le clic sur une image
 	const handleImageClick = (imageId) => {
-		// Mélange la liste
 		setImagesList((prevList) => shuffleArray(prevList));
 
 		if (clickedImages.includes(imageId)) {
-			bestScore < score ? bestScore : setbestScore(score);
-			if (score > bestScore) {
-				setbestScore(score);
-			}
-			// Si l'image est déjà cliquée, le jeu est terminé
+			// Jeu terminé si une image est cliquée deux fois
 			setGameOver(true);
-			setScore(0);
+
+			// Mettre à jour le meilleur score si le score actuel est plus élevé
+			if (score > bestScore) {
+				setBestScore(score);
+				localStorage.setItem('bestScore', JSON.stringify(score));
+			}
+
+			// Enregistrer le type d'image en local
+			localStorage.setItem('imageType', JSON.stringify(imageType));
+
+			// Réinitialiser le score et la liste des images cliquées
+			// setScore(0);
+			setClickedImages([]);
 		} else {
-			// Ajoute l'image à la liste des images cliquées
+			// Ajouter l'image cliquée à la liste et augmenter le score
 			setClickedImages((prevClickedImages) => [...prevClickedImages, imageId]);
 			setScore((prevScore) => prevScore + 1);
 		}
 	};
 
-	// Utiliser un useEffect pour afficher les images cliquées mises à jour
 	useEffect(() => {
-		console.log('Images cliquées : ', clickedImages);
-		console.log('Nouveau Score : ', score);
-	}, [clickedImages, score]);
+		// Sauvegarder le type d'image dans le localStorage quand il change
+		localStorage.setItem('imageType', JSON.stringify(imageType));
+	}, [imageType]);
 
 	return (
-		<div>
-			<div className='shadow-md fixed top-0 left-0 right-0 backdrop-blur-md bg-white/80'>
-				<Header gameScore={score} bestScore={bestScore} />
+		<div className='backdrop-blur-md bg-white/90  min-h-screen'>
+			<div className=' md:fixed md:top-0 md:left-0 md:right-0 backdrop-blur-md bg-white/80'>
+				<Header
+					gameScore={score}
+					bestScore={bestScore}
+					imageType={imageType}
+					setImageType={setImageType}
+				/>
 			</div>
-			<div className='p-4 pt-44'>
+			<div className='p-4 md:pt-44'>
 				{gameOver ? (
-					<p>Game Over! Vous avez cliqué deux fois sur une même image.</p>
+					<div className='flex flex-col justify-center items-center text-center border md:w-1/3 min-h-96 mx-auto mt-24 rounded-3xl bg-white shadow-2xl'>
+						<div>
+							<p className='text-4xl mb-2 font-bold'>Game Over! </p>
+							<p className='text-slate-500'>
+								You have clicked twice on the same image.
+							</p>
+							<div className='flex flex-row justify-center text-slate-600 mt-4'>
+								<p>
+									Your Score :{' '}
+									<span className='font-bold ms-2 text-lg text-slate-800'>
+										{score}
+									</span>
+								</p>
+							</div>
+							<button
+								onClick={() => {
+									setGameOver(false);
+									setScore(0);
+									setClickedImages([]);
+								}}
+								className='mt-8 p-2 px-14 bg-blue-500 text-white rounded-full'>
+								Restart
+							</button>
+						</div>
+					</div>
 				) : (
-					<div className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 items-center justify-items-center place-items-stretch '>
+					<div className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 items-center justify-items-center place-items-stretch min-h-screen'>
 						{shuffleArray(imagesList).map((image) => (
 							<Card
 								key={image.id}
@@ -87,7 +131,7 @@ const CardGrid = (props) => {
 										: image.attributes.titles.en_jp?.slice(0, 36) + '...' ||
 										  image.attributes.titles.en?.slice(0, 36) + '...'
 								}
-								onClick={() => handleImageClick(image.id)} // Ajoute un onClick pour chaque carte
+								onClick={() => handleImageClick(image.id)}
 							/>
 						))}
 					</div>
