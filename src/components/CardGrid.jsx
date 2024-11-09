@@ -8,6 +8,7 @@ const CardGrid = () => {
 	const [clickedImages, setClickedImages] = useState([]);
 	const [gameOver, setGameOver] = useState(false);
 	const [score, setScore] = useState(0);
+	const [loading, setLoading] = useState(true); // New loading state
 
 	const [imageType, setImageType] = useState(() => {
 		const savedImageType = localStorage.getItem('imageType');
@@ -19,12 +20,11 @@ const CardGrid = () => {
 		return savedBestScore ? JSON.parse(savedBestScore) : 0;
 	});
 
-	// Nouvel état pour afficher les confettis
 	const [showConfetti, setShowConfetti] = useState(false);
 
 	useEffect(() => {
-		// Récupération des données d'anime
 		const fetchAnimeData = async () => {
+			setLoading(true); // Start loading
 			try {
 				const response = await fetch(
 					`https://kitsu.io/api/edge/anime?filter[text]=${imageType}&page[limit]=15`
@@ -36,13 +36,14 @@ const CardGrid = () => {
 					'Erreur lors de la récupération des données Kitsu API:',
 					error
 				);
+			} finally {
+				setLoading(false); // End loading
 			}
 		};
 
 		fetchAnimeData();
 	}, [imageType]);
 
-	// Mélange aléatoire du tableau
 	const shuffleArray = (array) => {
 		const shuffled = [...array];
 		for (let i = shuffled.length - 1; i > 0; i--) {
@@ -52,38 +53,31 @@ const CardGrid = () => {
 		return shuffled;
 	};
 
-	// Fonction pour gérer le clic sur une image
 	const handleImageClick = (imageId) => {
 		setImagesList((prevList) => shuffleArray(prevList));
 
 		if (clickedImages.includes(imageId)) {
-			// Jeu terminé si une image est cliquée deux fois
 			setGameOver(true);
-			// Mettre à jour le meilleur score si le score actuel est plus élevé
 			if (score > bestScore) {
 				setBestScore(score);
 				localStorage.setItem('bestScore', JSON.stringify(score));
 			}
 		} else {
-			// Ajouter l'image cliquée et augmenter le score
 			setClickedImages((prevClickedImages) => [...prevClickedImages, imageId]);
 			setScore((prevScore) => prevScore + 1);
 		}
 	};
 
-	// Affiche les confettis lorsqu'un nouveau bestScore est atteint
 	useEffect(() => {
 		if (score > bestScore) {
 			setBestScore(score);
 			localStorage.setItem('bestScore', JSON.stringify(score));
 			setShowConfetti(true);
 
-			// Cache les confettis après 2 secondes
 			setTimeout(() => setShowConfetti(false), 4000);
 		}
 	}, [score, bestScore]);
 
-	// Sauvegarde le type d'image en local lorsqu'il change
 	useEffect(() => {
 		localStorage.setItem('imageType', JSON.stringify(imageType));
 	}, [imageType]);
@@ -127,6 +121,10 @@ const CardGrid = () => {
 								Restart
 							</button>
 						</div>
+					</div>
+				) : loading ? ( // Display loading while fetching data
+					<div className='flex justify-center items-center min-h-96'>
+						<p className='text-2xl text-gray-500'>Loading...</p>
 					</div>
 				) : (
 					<div className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 items-center justify-items-center place-items-stretch min-h-96'>
