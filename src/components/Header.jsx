@@ -3,7 +3,7 @@ import MangaImageType from './MangaImageType';
 
 const Header = ({
 	gameTitle = 'Manga Card Memory',
-	gameDescription = ``,
+	gameDescription = `Click on the cards to score points! Don't click the same one twice, or the game ends!`,
 	gameScore = 0,
 	bestScore = 0,
 	imageTypeValue,
