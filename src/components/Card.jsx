@@ -14,7 +14,7 @@ const Card = (props) => {
 				/>
 			</div>
 			<div className='p-2 pb-2'>
-				<p className='mb-2 text-lg leading-tight font-bold text-centerdark:text-white'>
+				<p className='mb-2 text-lg leading-tight font-bold text-center '>
 					{props.imgName}
 				</p>
 			</div>
