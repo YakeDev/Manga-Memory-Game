@@ -99,7 +99,7 @@ const CardGrid = () => {
 					setImageType={setImageType}
 				/>
 			</div>
-			<div className='p-4 md:pt-44'>
+			<div className='p-4 md:pt-52'>
 				{gameOver ? (
 					<div className='flex flex-col justify-center items-center text-center border md:w-1/3 min-h-96 mx-auto mt-24 rounded-3xl bg-white shadow-2xl'>
 						<div>
